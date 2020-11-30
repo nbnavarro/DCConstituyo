@@ -1,13 +1,16 @@
-# ADHbots project: DCConstituyo
+# DCConstituyo 🗳️
+ En el contexto actual que vive Chile, DCConstituyo permite conectar constituyentes con votantes, promoviendo la información y el debate con sentido.
 
-- Link to DCConstituyo: https://dcconstituyo.herokuapp.com/
-- Link to MiniApp (API tester): http://mini-dcconstituyo.herokuapp.com
+- Conoce la app! [DCConstituyo](https://dcconstituyo.herokuapp.com/)
 
-- DCConstituyo Documentation: https://github.com/IIC2513-2020-1/grupo-adhbots/blob/master/documentation.pdf
-- DCConstituyo API Documentation: https://app.swaggerhub.com/apis-docs/dcconstituyo/DCConstituyo/1.0.0#/
+## API
+DCConstituyo provee una API que permite obtener información de votantes, constituyentes y sus preferencias. Lo anterior se construyó con un fin simplemente educativo para el manejo de APIs. Sin embargo, se tiene conciencia de lo importante y confidencial que podría ser esta información.
+- API Documentation: [docs](https://app.swaggerhub.com/apis-docs/dcconstituyo/DCConstituyo/1.0.0#/)
+- Miniapp que usa la API: [miniapp](http://mini-dcconstituyo.herokuapp.com) 
 
-- Build by
-	* Nicolás Navarro
+---
+- Desarrollado por:
+	* Nicolás Navarro 
 	* Javiera Ochoa
 	* José Miguel Rojas
 
