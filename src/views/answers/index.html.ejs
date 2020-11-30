@@ -1,0 +1,43 @@
+<div class="container">
+	<h2>Pregunta y Respuesta</h2>
+	<div class="card-question-answer">
+		<%= question.content %>
+		<div class="card-post-footer">
+			<%= question.createdAt.toLocaleString('es-CL', {
+                        dateStyle: 'long',
+                        timeStyle: 'medium',
+                        timeZone: "Chile/Continental",   
+                    }) %>
+		</div>
+		
+	</div>
+	<% if (!answer) { %>
+		<h2>No ha sido respondida la pregunta </h2>
+		<%if (currentUser) {%>
+			<%if (question.constituentId == currentUser.id && userType =='constituent') { %>
+			<a class="button" href="<%= newAnswerPath %>">Escribir respuesta</a>
+			<%}%>
+		<%}%>
+
+	<% } else { %>
+		<div class="card-comments">
+			<%= answer.description %>
+			<div class="card-post-footer"><%= answer.createdAt.toLocaleString('es-CL', {
+				                        dateStyle: 'long',
+				                        timeStyle: 'medium',  
+				                        timeZone: "Chile/Continental", 
+				            }) %></div>
+			<%if ((currentUser.id == answer.authorId && userType == 'constituent' ) || (userType == 'admin')) {%>
+				<% if (!(userType == 'admin')) { -%>
+				<a class="button-comment" href="<%= editAnswerPath(answer) %>">Editar</a>					
+				<% } -%>
+				<form class="form-comment" action="<%= deleteAnswerPath(answer) %>" method="POST">
+					<input type="hidden" name="_method" value="delete">
+					<input class="delete-comment" type="submit" value="Borrar">
+				</form>
+			<%}%>
+		</div>
+		
+<% } %>
+<a class="button" href="<%= questionPath %>">Volver a las preguntas</a>
+</div>

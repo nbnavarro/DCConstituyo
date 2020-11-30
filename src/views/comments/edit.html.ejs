@@ -1,0 +1,15 @@
+<div class="container">
+	<% if (currentUser) { %>
+		<% if (currentUser.id == comment.authorCommentId && userType == commentType) { %>
+			<div class="card">
+				<h2>Editar Commentario</h2>
+				<%- include('_form') %>
+			</div>
+			
+		<% } else { %>
+			<h2>Tú no puedes editar este comentario</h2>
+		<% } %>
+	<% } else { %>
+		<h2>No has iniciado sesión</h2>
+	<% } %>
+</div>

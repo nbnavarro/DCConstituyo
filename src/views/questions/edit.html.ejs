@@ -1,0 +1,10 @@
+<div class="container">
+	<% if (idUser == question.authorId  && userType ==questionType){ %>
+		<div class="card">
+			<h2>Editar Pregunta</h2>
+			<%- include('_form') %>
+		</div>	
+	<% } else { %>
+		<h2> No deberías tratar de hackear ☹️ </h2>
+	<% } %>
+</div>

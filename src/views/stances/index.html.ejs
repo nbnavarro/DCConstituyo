@@ -1,0 +1,59 @@
+<div class="container">
+	<div class="card">
+		<div class="card-title">
+			Posturas de <%= topic.name %>
+		</div>
+		<div class="card-description">
+			<%= topic.description %>
+		</div>
+		<div class="card-content">
+		<div class="grid3">
+		<% stanceConst.forEach((par)=> { %>
+			<% stance = par[0]; laSigo = par[1] %>
+				<div><%= stance.name %></div>
+				<% if ('admin' == userType){ %>
+						<div>
+							<a class="button" href="<%= editStancePath(stance) %>">Editar</a>
+						</div>
+						<div>
+						<form class="form-general-button" action="<%= deleteStancePath(stance) %>" method="POST">
+							<input type="hidden" name="_method" value="delete">
+							<input class="delete-general" type="submit" value="Eliminar">
+						</form>
+						</div>
+				<% } else if ('constituent' == userType) {%>
+					<% if (!laSigo && !sigoAlguna){%>
+					<form action="<%=newConstituentStancesPath %>" method="post">
+						<input type="hidden" name="stanceId" value="<%= stance.id %>">
+						<input type="hidden" name="constituentId" value="<%= currentUser.id %>">
+						<input type="hidden" name="topicId" value="<%= stance.topicId %>">
+						<input class="button" type="submit" value="Apoyar">
+					</form>
+					<div></div>
+					<%} else if(laSigo){%>
+					<form action="<%=deleteConstituentStancesPath %>" method="post">
+						<input type="hidden" name="_method" value="delete">
+						<input type="hidden" name="stanceId" value="<%= stance.id %>">
+						<input type="hidden" name="constituentId" value="<%= currentUser.id %>">
+						<input type="hidden" name="topicId" value="<%= stance.topicId %>">
+						<input class="button" type="submit" value="Quitar apoyo">
+					</form>
+					<div></div>
+					<%}else{%>
+						<div></div>
+						<div></div> <!-- NO BORRAR ESTE DIV -->
+					<% }%>
+				<%}else{%>
+				<div></div>
+				<div></div><!-- NO BORRAR ESTE DIV -->
+				<%}%>
+			
+		<%});%>	
+		</div>
+		</div>
+	</div>
+</div>
+
+<% if ('admin' == userType){ %>
+	<a class="button" href="<%= newStancePath %>">Nueva Postura</a>
+<% } %>

@@ -1,0 +1,10 @@
+<div class="container">
+<h2>Nueva postura</h2>
+<% if ('admin' == userType){ %>
+	<div class="card">
+    <%- include('_form') %>
+	</div>
+<%} else{ %>
+    <h3>No deberias estar aqui!</h3>
+<%}%>
+</div>

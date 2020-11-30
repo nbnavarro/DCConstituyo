@@ -1,0 +1,10 @@
+<div class="container">
+	<% if (currentUser){ %>
+		<div class="card">
+			<h2>Nuevo comentario</h2>
+			<%- include('_form') %>
+		</div>	
+	<% } else { %>
+		<h2>Debes iniciar sesión para comentar</h2>
+	<% } %>
+</div>

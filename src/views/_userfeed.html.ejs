@@ -1,0 +1,104 @@
+<h1>Actividad Reciente</h1>
+<div class="grid-feed">
+    <div class="card">
+        <h3>Acceso Rapido</h3>
+        <h4>Constituyentes seguidos</h4>
+        <% if (listaConstituentsSeguidos.length == 0) { -%>
+            <p>No sigues a ningún constituyente</p>
+        <% } else { -%>
+            <% for (let seguido of listaConstituentsSeguidos) { -%>
+                <div>
+                    <a class="link" href="<%=constituentPath(seguido)%>"><%=seguido.name%></a>
+                </div>
+            <% } -%>
+        <% } -%>
+
+        <% if (userType == 'voter') { -%>
+            <h4>Temas seguidos</h4>
+            <% if (listaTemasSeguidos.length == 0) { -%>
+                <p>No sigues ningún tema</p>
+            <% } else { -%>
+                <% for (let temaSeguido of listaTemasSeguidos) { -%>
+                    <div>
+                        <a class="link" href="<%= stancesPath(temaSeguido) %>"><%= temaSeguido.name %></a> 
+                    </div>
+                <% } -%>
+            <% } -%>
+        <% } else if (userType == 'constituent'){ -%>
+            <h4>Temas de interés</h4>
+            <% if (Object.entries(temasInteresC).length === 0) { -%>
+                <p>No tienes temas de interés</p>
+            <% } else { -%>
+                <% for (let keyTemaInteres in temasInteresC) { -%>
+                    <div>
+                        <a class="link" href="<%= stancesPath(temasInteresC[keyTemaInteres]) %>"><%= temasInteresC[keyTemaInteres].name %></a> 
+                    </div>
+                <% } -%>
+            <% } -%>
+            
+        <% } -%>
+
+    </div>
+    <div>
+        <% if (listadoPublicacionesRecientes.length == 0) { -%>
+            <h3>No hay publicaciones recientes</h3>
+        <% } else { -%>
+            <div id="react-recent-posts" data-react_filtro_constituents="<%=reactFiltroConstituents%>">
+            </div>
+
+            <%for (post of listadoPublicacionesRecientes){%>
+
+                <div id="<%=post.id%>_<%=post.createdAt %>" class="card-post cartasRecientes" name="<%=dictConstituentList[post.constituentId].name%>">
+                    <div>
+                        <h3><a class="link" href="<%= constituentPath(dictConstituentList[post.constituentId]) %>"><%=dictConstituentList[post.constituentId].name%></a></h3>
+                    </div>
+                    <div class="post-content"><%= post.content %></div>
+                    <div class="card-comments-footer">
+                        Publicado el <%= post.createdAt.toLocaleString('es-CL', {
+                        dateStyle: 'long',
+                        timeStyle: 'medium',
+                        timeZone: "Chile/Continental",  
+                    }) %>
+                    </div>
+                    
+                    <a class="button-comment" href="<%= commentsPath(post) %>">Ver comentarios</a>
+                    
+                </div>
+            <%}%>
+        
+        <% } -%>
+        
+    </div>
+    <div class="card">
+        <h3>Sugerencias</h3>
+        <% if (Object.entries(dicRecomendados).length === 0) { -%>
+            <p>No hay más sugerencias por mostrar</p>
+        <% } else { -%>
+            
+        <% } -%>
+        <% for (keyId in dicRecomendados) { -%>
+            <div>
+                <div class="gridtwo">
+                    <h4><a class="link" href="<%=constituentPath(dicRecomendados[keyId].objeto)%>"><%=dicRecomendados[keyId].objeto.name %></a></h4>
+                    <% if (userType == 'voter') { -%>
+                        <form action="<%=newFollowPath%>" method="post">
+                            <input type="hidden" name="constituentId" value="<%=dicRecomendados[keyId].objeto.id %>">
+                            <input type="hidden" name="voterId" value="<%=currentUser.id %>">
+                            <input type="hidden" name="ruta" value="userFeed">
+                            <input class="button" type="submit" value="Seguir">
+                        </form>
+                    <% } else if (userType == 'constituent'){ -%>
+                        <form action="<%=newConstituentFollowPath%>" id="followform" method="post">
+                            <input type="hidden" name="constituentFollowingId" value="<%=dicRecomendados[keyId].objeto.id %>">
+                            <input type="hidden" name="ruta" value="userfeed">
+                            <input class="button" type="submit" value="Seguir">
+                        </form>
+                    <% } -%>
+                </div>
+            </div>
+            <% for (razon of dicRecomendados[keyId].lista) { -%>
+                    <div><%=razon %></div>
+            <% } -%>
+        <% } -%>
+    </div>
+</div>

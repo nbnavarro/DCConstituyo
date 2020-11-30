@@ -1,0 +1,37 @@
+<div class="container">
+	<%if (locals.errors) { %>
+		<div class="errors">
+			You need to fix the following errors:
+			<ul>
+				<%errors.forEach(error => { %>
+					<li><%= error.message %></li>
+				<% }); %>
+			</ul>
+		</div>
+	<% } %>
+	<form action="<%= submitPostPath %>" method="post">
+		<% if (!post.isNewRecord) { %>
+			<input type="hidden" name="_method" value="patch">
+		<% } %>
+		<% if (post.isNewRecord) { %>
+			<div>
+				<input type="hidden" name="constituentId" value="<%= constituent.id %>">
+			</div>
+		<% } else { %>
+			<div>
+				<input type="hidden" name="constituentId" value="<%= post.constituentId %>">
+			</div>
+		<% } %>
+		<div class="grid-general-form">
+			<label for='content'>Contenido</label>
+			<textarea type="text" name="content"><%= post.content %></textarea>
+		</div>
+		<div>
+			<% if (post.isNewRecord) { %>
+				<input class="button" type="submit" name="create" value="Crear publicación">
+			<% } else { %>
+				<input class="button" type="submit" name="update" value="Confirmar">
+			<% } %>
+		</div>
+	</form>
+</div>

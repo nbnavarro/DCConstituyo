@@ -1,0 +1,14 @@
+<div class="container">
+	<%if (currentUser) {%>
+		<%if (currentUser.id == answer.authorId && userType == 'constituent' ) {%>
+			<div class="card">
+				<h2>Editar respuesta</h2>
+				<%- include('_form') %>
+			</div>
+		<%} else{%>
+			<h2>Tu no puedes editar esto</h2>
+		<%}%>
+	<%} else{%>
+		<h2>No has iniciado sesion</h2>
+	<%}%>
+</div>

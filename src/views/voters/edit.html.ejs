@@ -1,0 +1,10 @@
+<div class="form-container">
+	<% if (voter.id == idUser && 'voter' == userType){%>
+		<div class="card">
+			<h2>Editar perfil</h2>
+		<%- include('_form') %>
+		</div>
+	<% } else { %>
+		<h2>No deberías estar aquí</h2>
+	<% } %>
+</div>

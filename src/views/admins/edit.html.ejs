@@ -1,0 +1,11 @@
+<div class="container">    
+    <% if (admin.id == currentUser.id && 'admin' == userType){%>
+        <div class="card">
+            <h2>Editar Administrador</h2>
+            <%- include('_form') %>
+        </div>
+        
+	<% } else { %>
+		<h2>No deberías estar aquí</h2>
+	<% } %>
+</div>

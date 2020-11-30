@@ -1,0 +1,10 @@
+<div class="form-container">
+	<% if (!currentUser){ %>
+		<div class="card">
+			<h2>Registrarse como constituyente</h2>
+			<%- include('_form') %>
+		</div>	
+	<% } else { %>
+		<h2>No deberías estar aquí 🤨</h2>
+	<% } %>
+</div>

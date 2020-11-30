@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <meta charset="utf-8">
+    <title>DCConstituyo</title>
+    <% if (env !== 'development') { %>
+      <link rel="stylesheet" href="<%= assetPath('app.css') %>">
+    <% } %>
+  </head>
+
+  <body>
+    <header>
+      <div id = "navbar">
+        <% var link = '/' %>
+          <a href="<%= link %>"><img id="logo"src= "<%= assetPath('logo.png') %>" alt="DCConstituyo"></a>
+          <% if (currentUser) { %>
+            <form class="navbar-logout-form" action="<%= destroySessionPath %>" method="post">
+              <input type="hidden" name="_method" value="delete" />
+              <input class='navbar-logout-button' type="submit" value="Cerrar Sesion" />
+            </form>
+            <a class="navbar-item" href="https://app.swaggerhub.com/apis-docs/dcconstituyo/DCConstituyo/1.0.0#/" target="_blank">Api Docs</a>
+            <a class="navbar-item" href="/senators">Senadores</a>
+            <a class="navbar-item" href="<%= constituentsIndexPath %>">Constituyentes</a>
+            <a class="navbar-item" href="<%= topicsIndexPath %>">Temas</a>
+            <% if (userType != 'admin') {%>
+              <a class="navbar-item" href="<%= perfilPath(currentUser) %>">Perfil</a>
+              <% if (userType == 'constituent') {%>
+                <a class="navbar-item" href="<%= publicacionesPath(currentUser) %>">Muro</a>
+                <a class="navbar-item" href="<%= preguntasPath(currentUser) %>">Foro</a>
+                <%}%>
+            <% } else {%>
+              <a class="navbar-item" href="<%= votersIndexPath %>">Votantes</a>
+              <a class="navbar-item" href="/admins">Admins</a> 
+            <% }%>
+          <% } else { %>
+            <a class="navbar-item" href="<%= newSessionPath %>">Iniciar Sesion</a>
+            <a class="navbar-item" href="<%= newConstituentPath %>">Registrarse como constituyente</a>
+            <a class="navbar-item" href="<%= newVoterPath %>">Registrarse como votante</a>
+          <% } %>
+    </div>
+    </header>
+    <%- body %>  
+    <script src="<%= assetPath('app.js') %>"></script>
+  </body>
+
+</html>

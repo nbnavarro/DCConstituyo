@@ -1,0 +1,39 @@
+<div class="container-adminhome">
+  <h2>Administradores</h2>
+  <% if (!adminsList.length) { %>
+    <h2>No hay administradores creados</h2>
+  
+  <% } else { %>
+  
+    <table>
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Correo</th>
+          <th colspan="2">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% adminsList.forEach((admin) => { %>
+          <tr>
+            <td><%= admin.name %></td>
+            <td><%= admin.email %></td>
+            <%if (currentUser.id == admin.id){%>
+              <td>
+                <a class="button" href="<%= editAdminPath(admin) %>">Editar</a>
+              </td>
+              <td>
+                <form action="<%= deleteAdminPath(admin) %>" method="POST">
+                  <input type="hidden" name="_method" value="delete" />
+                  <input class="button" type="submit" value="Eliminar" />
+                </form>
+              </td>
+            <%}%>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  <% } %>
+  
+  <a class="button newadmin-button" href="<%= newAdminPath %>">Nuevo Administrador</a>
+</div>

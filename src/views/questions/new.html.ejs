@@ -1,0 +1,12 @@
+<div class="container">
+
+	<% if (currentUser){%>
+		<div class="card">
+			<h2>Nueva Pregunta</h2>
+			<%- include('_form') %>
+		</div>
+
+	<% } else { %>
+		<h2>Debes Iniciar sesión si quieres hacer preguntas</h2>
+	<% } %>
+</div>

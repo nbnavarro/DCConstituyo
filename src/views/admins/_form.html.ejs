@@ -1,0 +1,37 @@
+	<div class="container">
+		<%if (locals.errors) { %>
+			<div class="errors">
+				Necesitas arreglar los siguientes errores:
+				<ul>
+					<%errors.forEach(error => { %>
+						<li  class="error"><%= error.message %></li>
+					<% }); %>
+				</ul>
+			</div>
+		<% } %>
+		<%if (locals.emailError) { %>
+			<p class="error">Tu email ya se encuentra con un usuario registrado</p>
+		<% } %>
+		<form action="<%= submitAdminPath %>" method="post">
+			<% if (!admin.isNewRecord) { %>
+				<input type="hidden" name="_method" value="patch">
+			<% } %>
+
+			<div class="grid-general-form">
+				<label for='name'>Nombre</label>
+				<input type="text" name="name" value="<%= admin.name %>">
+				<label for='email'>Correo electrónico</label>
+				<input type="text" name="email" value="<%= admin.email %>">
+				<label for='email'>Contraseña</label>
+				<input type="password" name="password" value="<%= admin.password %>">
+			</div>
+
+			<div>
+				<% if (admin.isNewRecord) { %>
+					<input class="button" type="submit" name="create" value="Crear Admin">
+				<% } else { %>
+					<input class="button" type="submit" name="update" value="Actualizar">
+				<% } %>
+			</div>
+		</form>
+	</div>

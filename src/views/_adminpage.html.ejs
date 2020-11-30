@@ -1,0 +1,251 @@
+<div class="container-adminhome">
+	<h1 id="moderar">Moderar</h1>
+    <div class="grid-moderar">
+    	<div>
+	    	<h2>Publicaciones</h2>
+            <% if (!(postsPendientes)) { -%>
+                <h3 class="header-adminhome">No hay publicaciones pendientes por revisar</h3>
+            <% } -%>
+	    	<% for (post of allPostList) { -%>
+                <% if (post.checked == 'no') { -%>
+	    		<div id="<%=post.id%>_<%=post.createdAt %>" class="card-post cartasRecientes" name="<%=dictConstituentList[post.constituentId].name%>">
+    		        <h3><a class="link" href="<%= constituentPath(dictConstituentList[post.constituentId]) %>"><%=dictConstituentList[post.constituentId].name%></a></h3>
+	    		    <div class="post-content"><%= post.content %></div>
+	    		    <div class="card-comments-footer">
+	    		        Publicado el <%= post.createdAt.toLocaleString('es-CL', {
+	    		        dateStyle: 'long',
+	    		        timeStyle: 'medium',
+	    		        timeZone: "Chile/Continental",  
+	    		    }) %>
+	    		    </div>
+	    	
+	    		    <a class="button-comment" href="<%= commentsPath(post) %>" target="_blank">Ver detalle</a>
+                    <form action="/constituents/<%=post.constituentId%>/posts/<%=post.id%>" method="post" class="form-comment">
+                        <input type="hidden" name="_method" value="patch">
+                        <input type="hidden" name="checked" value="yes">
+                        <input type="hidden" name="ruta" value="adminpage">
+                        <input class="delete-comment" type="submit" name="update" value="Revisado">
+                    </form>
+	    		    
+	    		</div>
+                <% } -%>
+	    	<% } -%>
+    	</div>
+
+    	<div>
+    		<h2>Comentarios</h2>
+            <% if (!(commentsVotersPendientes || commentsConstPendientes)) { -%>
+                <h3 class="header-adminhome">No hay comentarios pendientes por revisar</h3>
+            <% } -%>
+    		<% for (commentVoter of allCommentsVotersList) { -%>
+                <% if (commentVoter.checked === 'no') { -%>
+	    		<div class="card-post">
+	    			<%let esteVoter=dictAllVoters[commentVoter.authorCommentId] %>
+	    			<h3>
+                        <a class="link" href="<%= profileVoterPath(esteVoter) %>"><%= esteVoter.name %></a>
+                    </h3>
+	    			<div class="post-content"><%= commentVoter.content %></div>
+	    			<div class="card-comments-footer">
+						Comentado el <%= commentVoter.createdAt.toLocaleString('es-CL', {
+                        dateStyle: 'long',
+                        timeStyle: 'medium',  
+                        timeZone: "Chile/Continental", 
+                    	}) %>
+					</div>
+                    <a class="button-comment" href="<%= commentsPath(dictPosts[commentVoter.postId]) %>" target="_blank">Ver detalle</a>
+                    <form action="<%= commentsPath(dictPosts[commentVoter.postId])%><%=commentVoter.id%>" method="post" class="form-comment">
+                        <input type="hidden" name="_method" value="patch">
+                        <input type="hidden" name="checked" value="yes">
+                        <input type="hidden" name="ruta" value="adminpage">
+                        <input class="delete-comment" type="submit" name="update" value="Revisado">
+                    </form>
+	    		</div>                   
+                <% } -%>
+    		<% } -%>
+
+    		<% for (commentConst of allCommentsConstsList) { -%>
+                <% if (commentConst.checked === 'no') { -%>
+        			<div class="card-post">
+    	    			<%let esteConst=dictConstituentList[commentConst.authorCommentId] %>
+    	    			<h3>
+                            <a class="link" href="<%= constituentPath(esteConst) %>"><%= esteConst.name %></a>
+                        </h3>
+    	    			<div class="post-content"><%= commentConst.content %></div>
+    	    			<div class="card-comments-footer">
+    						Comentado el <%= commentConst.createdAt.toLocaleString('es-CL', {
+                            dateStyle: 'long',
+                            timeStyle: 'medium',  
+                            timeZone: "Chile/Continental", 
+                        	}) %>
+    					</div>
+                        <a class="button-comment" href="<%= commentsPath(dictPosts[commentConst.postId]) %>" target="_blank">Ver detalle</a>
+                        <form action="<%= commentsPath(dictPosts[commentConst.postId])%>constituent/<%=commentConst.id%>" method="post" class="form-comment">
+                            <input type="hidden" name="_method" value="patch">
+                            <input type="hidden" name="checked" value="yes">
+                            <input type="hidden" name="ruta" value="adminpage">
+                            <input class="delete-comment" type="submit" name="update" value="Revisado">
+                        </form>
+    	    		</div>
+                <% } -%>
+    		<% } -%>
+    	</div>
+
+    	<div>
+    		<h2>Preguntas</h2>
+            <% if (!(questionsVotersPendientes || questionsConstPendientes)) { -%>
+                <h3 class="header-adminhome">No hay preguntas pendientes por revisar</h3>
+            <% } -%>
+    		<% for (let questionVoter of allQuestionsVotersList) { -%>
+    			<%let voterAsking=dictAllVoters[questionVoter.authorId] %>
+    			<%let constAsked=dictConstituentList[questionVoter.constituentId] %>
+                <% if (questionVoter.checked === 'no') { -%>
+        			<div class="card-post">
+        			    <div>
+        			    	<h3>
+    	    			        <a class="link" href="/voters/<%=voterAsking.id%>" ><%= voterAsking.name %></a>
+    	    			    	<span class="link">⇨</span>
+    	    			        <a class="link" href="/constituents/<%=constAsked.id%>" ><%= constAsked.name %></a>
+        			    	</h3>
+        			    </div>
+        			    <div class="post-content"><%= questionVoter.content %></div>
+        			    <div class="card-comments-footer">
+        			        Preguntado el <%= questionVoter.createdAt.toLocaleString('es-CL', {
+        			        dateStyle: 'long',
+        			        timeStyle: 'medium',
+        			        timeZone: "Chile/Continental",  
+        			    }) %>
+        			    </div>
+                        <a class="button-comment" href="/constituents/<%=questionVoter.constituentId %>/questions" target="_blank">Ver detalle</a>
+        			    <form action="/constituents/<%=questionVoter.constituentId %>/questions/voter/<%=questionVoter.id%>" method="post" class="form-comment">
+                            <input type="hidden" name="_method" value="patch">
+                            <input type="hidden" name="checked" value="yes">
+                            <input type="hidden" name="ruta" value="adminpage">
+                            <input class="delete-comment" type="submit" name="update" value="Revisado">
+                        </form>
+        			    
+        			</div>
+                
+                <% } -%>
+    		<% } -%>
+
+    		<% for (let questionConst of allQuestionsConstsList) { -%>
+    			<%let constAsking=dictConstituentList[questionConst.authorId] %>
+    			<%let constAsked=dictConstituentList[questionConst.constituentId] %>
+                <% if (questionConst.checked === 'no') { -%>
+        			<div class="card-post">
+        			    <div>
+        			    	<h3>
+    	    			        <a class="link" href="/constituents/<%=constAsking.id%>" ><%= constAsking.name %></a>
+    	    			    	<span class="link"> ⇨ </span>
+    	    			        <a class="link" href="/constituents/<%=constAsked.id%>" ><%= constAsked.name %></a>
+        			    	</h3>
+        			    </div>
+        			    <div class="post-content"><%= questionConst.content %></div>
+        			    <div class="card-comments-footer">
+        			        Preguntado el <%= questionConst.createdAt.toLocaleString('es-CL', {
+        			        dateStyle: 'long',
+        			        timeStyle: 'medium',
+        			        timeZone: "Chile/Continental",  
+        			    }) %>
+        			    </div>
+        			    
+                        <a class="button-comment" href="/constituents/<%=questionConst.constituentId %>/questions" target="_blank">Ver detalle</a>
+                        <form action="/constituents/<%=questionConst.constituentId %>/questions/constituent/<%=questionConst.id%>" method="post" class="form-comment">
+                                <input type="hidden" name="_method" value="patch">
+                                <input type="hidden" name="checked" value="yes">
+                                <input type="hidden" name="ruta" value="adminpage">
+                                <input class="delete-comment" type="submit" name="update" value="Revisado">
+                        </form>
+
+        			    
+        			</div>
+
+                <% } -%>
+    		<% } -%>
+    	</div>
+
+    	<div>
+    		<h2>Respuestas</h2>
+            <% if (!(answersVotersPendientes || answersConstPendientes)) { -%>
+                <h3 class="header-adminhome">No hay respuestas pendientes por revisar</h3>
+            <% } -%>
+			<% for (let answerVoter of allAnswersVotersList) { -%>
+    			<%let constAnswering = dictConstituentList[answerVoter.authorId] %>
+                <%let voterAskingId = parRespuestaPreguntaVoter[answerVoter.id]['authorId'] %>
+                <%let voterPreguntando = dictAllVoters[voterAskingId]%>
+                <% if (answerVoter.checked === 'no') { -%>
+        			<div class="card-post">
+        			    <div>
+        			    	<h3>
+                                <a class="link" href="/constituents/<%=constAnswering.id%>" ><%= constAnswering.name %></a>
+                                <span class="link"> ⇨ </span>
+                                <a class="link" href="/voters/<%=voterPreguntando.id%>" ><%= voterPreguntando.name %></a>
+
+                            </h3>
+        			    </div>
+        			    <div class="post-content"><%= answerVoter.description %></div>
+        			    <div class="card-comments-footer">
+        			        Respondido el <%= answerVoter.createdAt.toLocaleString('es-CL', {
+        			        dateStyle: 'long',
+        			        timeStyle: 'medium',
+        			        timeZone: "Chile/Continental",  
+        			    }) %>
+        			    </div>
+        			    <a class="button-comment" href="/constituents/<%=answerVoter.authorId %>/questions/voter/<%=answerVoter.id %>/answers/" target="_blank">Ver detalle</a>
+        			    <form action="/constituents/<%=answerVoter.authorId %>/questions/voter/<%=answerVoter.id %>/answers/<%=answerVoter.id%>" method="post" class="form-comment">
+                                <input type="hidden" name="_method" value="patch">
+                                <input type="hidden" name="checked" value="yes">
+                                <input type="hidden" name="ruta" value="adminpage">
+                                <input class="delete-comment" type="submit" name="update" value="Revisado">
+                        </form>
+
+        			    
+        			</div>
+                    
+                <% } -%>
+    		<% } -%>
+
+    		<% for (let answerConst of allAnswersConstsList) { -%>
+    			<%let constAnswering=dictConstituentList[answerConst.authorId] %>
+                <%let constAskingId = parRespuestaPreguntaConst[answerConst.id]['authorId'] %>
+                <%let constPreguntando = dictConstituentList[constAskingId]%>
+                <% if (answerConst.checked === 'no') { -%>
+        			<div class="card-post">
+        			    <div>
+        			    	<h3>
+                                <a class="link" href="/constituents/<%=constAnswering.id%>" ><%= constAnswering.name %></a>
+                                <span class="link"> ⇨ </span>
+                                <a class="link" href="/constituents/<%=constPreguntando.id%>" ><%= constPreguntando.name %></a>
+                            </h3>
+        			    </div>
+        			    <div class="post-content"><%= answerConst.description %></div>
+        			    <div class="card-comments-footer">
+        			        Respondido el <%= answerConst.createdAt.toLocaleString('es-CL', {
+        			        dateStyle: 'long',
+        			        timeStyle: 'medium',
+        			        timeZone: "Chile/Continental",  
+        			    }) %>
+        			    </div>
+        			    <a class="button-comment" href="/constituents/<%=answerConst.authorId %>/questions/constituent/<%=answerConst.id %>/answers/" target="_blank">Ver detalle</a>
+                        <form action="/constituents/<%=answerConst.authorId %>/questions/constituent/<%=answerConst.id %>/answers/<%=answerConst.id%>" method="post" class="form-comment">
+                                <input type="hidden" name="_method" value="patch">
+                                <input type="hidden" name="checked" value="yes">
+                                <input type="hidden" name="ruta" value="adminpage">
+                                <input class="delete-comment" type="submit" name="update" value="Revisado">
+                        </form>
+        			    
+        			</div>
+                    
+                <% } -%>
+    		<% } -%>
+
+    	</div>
+
+    </div>
+
+
+
+
+
+
+</div>

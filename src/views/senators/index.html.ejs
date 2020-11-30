@@ -1,0 +1,20 @@
+<div class="container">
+<h2>Senadores Vigentes</h2>
+<div id='react-search-senator'></div>
+	<div class="grid3">
+		<% for (let senator of allSenatorsList) { -%>
+			<div class="card">
+				<div class="card-title"><%=senator.PARLNOMBRE %> <%=senator.PARLAPELLIDOPATERNO%> <%=senator.PARLAPELLIDOMATERNO%> (<%=senator.PARTIDO%>)</div>
+				<div class="card-footer"><%=senator.REGION%></div>
+				<div class="card-description">
+					<p>Circunscripción: <%=senator.CIRCUNSCRIPCION%></p>
+					<p><%=senator.FONO%></p>
+					<p><%=senator.EMAIL%></p>
+				</div>
+				<a class="button" href="<%=senator.CURRICULUM%>">Ver currículum</a>
+			</div>
+			
+		<% } -%>
+		
+	</div>
+</div>

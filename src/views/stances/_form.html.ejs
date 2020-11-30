@@ -1,0 +1,39 @@
+<div>
+	<%if (locals.errors) { %>
+		<div class="errors">
+			You need to fix the following errors:
+			<ul>
+				<%errors.forEach(error => { %>
+					<li><%= error.message %></li>
+				<% }); %>
+			</ul>
+		</div>
+	<% } %>
+	<div class="container">
+	<form action="<%= submitStancePath %>" method="post">
+		<% if (!stance.isNewRecord) { %>
+			<input type="hidden" name="_method" value="patch">
+		<% } %>
+		<% if (stance.isNewRecord) { %>
+			<div>
+				<input type="hidden" name="topicId" value="<%= topic.id %>">
+			</div>
+		<% } else { %>
+			<div>
+				<input type="hidden" name="topicId" value="<%= stance.topicId %>">
+			</div>
+		<% } %>
+		<div>
+			<label for='name'>Nombre</label>
+			<input type="text" name="name" value="<%= stance.name %>">
+		</div>
+		<div>
+			<% if (stance.isNewRecord) { %>
+				<input class="button" type="submit" name="create" value="Crear postura">
+			<% } else { %>
+				<input class="button" type="submit" name="update" value="Confirmar">
+			<% } %>
+		</div>
+	</form>
+	</div>
+</div>

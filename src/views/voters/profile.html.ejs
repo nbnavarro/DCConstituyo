@@ -1,0 +1,143 @@
+<h2>Perfil de votante</h2>
+
+<div class="container">
+    <div class="card">
+        <h3>Datos personales</h3>
+        <p>Nombre: <%= voter.name %></p>
+        <p>Edad: <%= voter.age %></p>
+        <p>Correo: <%= voter.email %></p>
+    </div>
+
+    <div class="grid-buttons">
+
+        <% if (voter.id == idUser && 'voter' == userType) { %>
+            <a class="button" href="<%= editVoterPath(voter) %>">Editar Perfil</a>
+        <% } %>
+
+        <% if ((voter.id == idUser && 'voter' == userType) || ('admin' == userType)) { %>
+            <form class ='form-general-button' action="<%= deleteVoterPath(voter) %>" method="POST">
+                <input type="hidden" name="_method" value="delete">
+                <input class="delete-general" type="submit" value="Eliminar cuenta">
+            </form>
+        <% } %>
+
+    </div>
+
+</div>
+
+
+<div class="container">
+    <div class="gridtwo">
+        <div class="grid-item">
+            <div class="card">
+                <h3>Constituyentes seguidos</h3>
+                <div class="gridtwo">
+
+                <% if (constituentsList.length == 0) { -%>
+                    <p>No sigues a ningun constituyente</p>
+                <% } else { -%>
+                    <% constituentsList.forEach(function(constituent){ %>
+                        <div class="grid-item"><a class="link" href="<%= constituent[1] %>"><%= constituent[0].name %></a></div>
+                        <% if (voter.id == idUser && 'voter' == userType){ %>
+                            <div class="grid-item">
+                                <form action="<%=deleteFollowPath %>" method="post">
+                                    <input type="hidden" name="_method" value="delete">
+                                    <input type="hidden" name="voterId" value="<%=voter.id %>">
+                                    <input type="hidden" name="ruta" value="profileVoter">
+                                    <input type="hidden" name="constituentId" value="<%=constituent[0].id %>">
+                                    <input class="button" type="submit" value="Borrar">
+                                </form>
+                            </div>
+                        <% } else{%>
+                        <div></div>
+                        <%}%>
+                    <% }); %>
+                <% } -%>
+                    
+
+                </div>
+            </div>
+        </div>
+    
+        <div class="grid-item">
+            <div class="card">
+                <h3>Temas seguidos</h3>
+                <div class="gridtwo">
+
+                <% if (topicWithPath.length == 0) { -%>
+                    <label>No sigues ningun tema</label>
+                <% } else { -%>
+                    <% topicWithPath.forEach(pair=>{ %>
+                        <div class="grid-item"><a class="link" href="<%= pair[1] %>"><%= pair[0].name %></a></div>
+                        <% if (voter.id == idUser && 'voter' == userType){ %>
+                            <div class="grid-item">
+                                <form action="<%=deleteInterestPath %>" method="post">
+                                    <input type="hidden" name="_method" value="delete">
+                                    <input type="hidden" name="voterId" value="<%=voter.id %>">
+                                    <input type="hidden" name="topicId" value="<%=pair[0].id %>">
+                                    <input class="button" type="submit" value="Borrar">
+                                </form>
+                            </div>
+                        <% } else{%>
+                        <div></div>
+                        <%}%>
+                    <% }); %>
+                <% } -%>
+
+                
+                </div>   
+            </div>
+        </div>
+        <% if (voter.id == idUser && 'voter' == userType){ %>
+            <div class="grid-item">
+                <div class="card">
+                    <h3>Seguir constituyente</h3>
+
+                    <%if (allConstituentsList.length == 0) {%>
+                        <label>Ya sigues a todos los constituyentes existentes</label>
+                    <%}else{%>
+                        <label for="constituents">Elige un constituyente:</label>
+                        <select name="constituentId" form="followform">
+                            <% allConstituentsList.forEach((constituent)=> { %>
+                                <option value = "<%=constituent.id%>"> <%=constituent.name%> </option>
+                            <% }) %>
+                        </select>
+                        
+                        <form action="<%=newFollowPath%>" id="followform" method="post">
+                            <input type="hidden" name="voterId" value="<%=voter.id %>">
+                            <input type="hidden" name="ruta" value="profileVoter">
+                            <input class="button" type="submit" value="Seguir">
+                        </form>
+                    <%}%>
+                </div>
+            </div>
+        
+            <div class="grid-item">
+                <div class="card">
+                    <h3>Seguir tema</h3>
+
+                    <%if (allTopicsList.length == 0) {%>
+                        <label>Ya sigues todos los temas existentes</label>
+                    <%}else{%>
+                        <label for="topics">Elige un tema:</label>
+                        <select name="topicId" form="interestform">
+                            <% allTopicsList.forEach((topic)=> { %>
+                                <option value = "<%=topic.id%>"> <%=topic.name%> </option>
+                            <% }) %>
+                        </select>
+                        
+                        <form action="<%=newInterestPath%>" id="interestform" method="post">
+                            <input type="hidden" name="voterId" value="<%=voter.id %>">
+                            <input class="button" type="submit" value="Seguir">
+                        </form>
+                    <%}%>
+        
+                    
+        
+                    
+                </div>
+            </div>
+
+        <% } %>
+    </div>
+</div>

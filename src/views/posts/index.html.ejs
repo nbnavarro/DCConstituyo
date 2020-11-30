@@ -1,0 +1,101 @@
+<div class="container">
+<h2>Publicaciones de <a class="link" href="<%= constituentPath %>"><%= constituent.name %></a></h2>
+	
+	<% if (constituent.id == idUser && 'constituent' == userType){ %>
+		<div class="card">
+			<div data-content="<%=constituent.id%>" id="react-make-post"></div>
+		</div>
+	<% } %>
+
+	<% if (!postsList.length) { %>
+		<h2>No hay publicaciones actualmente</h2>
+
+	<%} else {%>
+		<% postsWithComments.forEach((par)=> { %>
+			<% post = par[0]; comment_author_type = par[1]%>
+			<div class="card-post">
+				<div>
+					<h3><a class="link" href="<%= constituentPath %>"><%= constituent.name %></a></h3>
+				</div>
+				<div class="post-content"><%= post.content %></div>
+				<div class="card-post-footer">
+					Publicado el <%= post.createdAt.toLocaleString('es-CL', {
+                        dateStyle: 'long',
+                        timeStyle: 'medium',  
+                        timeZone: "Chile/Continental", 
+                    }) %>
+				</div>
+				<button class="button-comment button-showHide" id="button_<%=constituent.id%>-<%=post.id%>">
+					Mostrar comentarios
+				</button>
+				<% if ((constituent.id == idUser && 'constituent' == userType) || ('admin' == userType)) { %>
+					<a class="button-comment" href="<%= editPostPath(post) %>">Editar Publicación</a>
+					<form class="form-comment" action="<%= deletePostPath(post) %>" method="POST">
+						<input type="hidden" name="_method" value="delete">
+						<input class="delete-comment" type="submit" value="Borrar Publicación">
+					</form>
+				<% } %>
+
+			<!-- </div> -->
+			<div class="comments-showHide hide" id="comments_<%=constituent.id%>-<%=post.id%>" >
+			<% if(comment_author_type == 0){ %>
+				<div class="missing-info">Aún no hay comentarios</div>
+			<%}%>
+			<% for (par of comment_author_type) { %>
+				<% comment = par[0]; author = par[1]; type = par[2] %>
+				<div class="card-comments">
+					<div>
+						<% if (type == 'voter') {%>
+							<a class="link" href="<%= profilePath(author) %>"><%= author.name %></a>
+						<% } else { %>
+							<a class="link" href="<%= profileConstituentPath(author) %>"><%= author.name %></a>
+						<% } %>
+					</div>
+					<div class="post-content"><%= comment.content %></div>
+					<div class="card-comments-footer">
+						<%= comment.createdAt.toLocaleString('es-CL', {
+                        dateStyle: 'long',
+                        timeStyle: 'medium',  
+                        timeZone: "Chile/Continental", 
+                    }) %>
+					</div>
+					<% if (currentUser) { %>
+						<% if (type == 'voter'){ %>
+							<% if (currentUser.id == comment.authorCommentId && userType == 'voter') { %>
+								<div>
+									<a class="button-comment" href="<%= editCommentPath(post, comment) %>">Editar comentario</a>
+									<form class="form-comment" action="<%= deleteCommentPath(post, comment) %>" method="POST">
+										<input type="hidden" name="_method" value="delete">
+										<input class="delete-comment" type="submit" value="Borrar comentario">
+									</form>	
+								</div>	
+							<% } %>
+						<% } else { %>
+							<% if (currentUser.id == comment.authorCommentId && userType == 'constituent') { %>
+								<div>
+									<a class="button-comment" href="<%= editCommentConstituentPath(post, comment) %>">Editar comentario</a>
+									<form class="form-comment" action="<%= deleteCommentConstituentPath(post, comment) %>" method="POST">
+										<input type="hidden" name="_method" value="delete">
+										<input class="delete-comment" type="submit" value="Borrar">
+									</form>
+								</div>
+							<% } %>
+						<% } %>
+					<% } %>
+				</div>
+			<% } %>
+			</div>
+			<% if (currentUser){ %>
+				<% if (userType == 'voter'){ %>
+					<div data-content="voterComment_<%=constituent.id%>_<%=post.id%>_<%=currentUser.id%>" class="react-make-comment"></div>
+				<%}else if(userType == 'constituent'){%>
+					<div data-content="constituentComment_<%=constituent.id%>_<%=post.id%>_<%=currentUser.id%>" class="react-make-comment"></div>
+				<%}%>
+			<% } %>
+			</div>
+		<% }) %>
+	<% } %>
+
+<a class="button" href="<%= constituentPath %>">Volver</a>
+
+</div>

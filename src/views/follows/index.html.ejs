@@ -1,0 +1,33 @@
+
+<div class="container">
+
+	<h2>Lista follows</h2>
+
+	<table>
+			<thead>
+				<tr>
+					<th>Votante</th>
+					<th>Constituyentes</th>
+				</tr>
+			</thead>
+
+			<tbody>
+				<% votersList.forEach((voter)=> { %>
+					<tr>
+						<td>
+							<%=voter.name %>
+						</td>
+
+						<td>
+							<ul>
+							<%voter.constituents.forEach(element=>{%>
+								<li><%=element.name%></li>
+							<%})%>
+						</ul>
+						</td>
+
+					</tr>
+				<% }) %>
+			</tbody>
+		</table>
+</div>

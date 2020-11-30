@@ -1,0 +1,87 @@
+<div class="container">
+	
+
+	<div class="card-post">
+		<h2><%= duenoPost.name %></h2>
+		<%= post.content %>
+		<div class="card-post-footer">
+			<%= post.createdAt.toLocaleString('es-CL', {
+                        dateStyle: 'long',
+                        timeStyle: 'medium',
+                        timeZone: "Chile/Continental",   
+                    }) %>
+		</div>
+    <% if (!commentVoter.length && !commentConstituentList.length) { %>
+			<h2>Aún no hay comentarios </h2>
+		<% } else { %>
+		<% for (const par of commentVoter) { %>
+			<% comment = par[0]; voter = par[1] %>
+			<div class="card-comments">
+				<div>
+					<a class="link" href="<%= profilePath(voter) %>"><%= voter.name %></a>
+				</div>
+				<%= comment.content %>
+				<div class="card-comments-footer">
+					<%= comment.createdAt.toLocaleString('es-CL', {
+                        dateStyle: 'long',
+                        timeStyle: 'medium',  
+                        timeZone: "Chile/Continental", 
+                    }) %>
+				</div>
+				<% if (currentUser) { %>
+					<% if (currentUser.id == comment.authorCommentId && userType == 'voter') { %>
+						<div>
+							<a class="button-comment" href="<%= editCommentPath(comment) %>">Editar comentario</a>
+							<form class="form-comment" action="<%= deleteCommentPath(comment) %>" method="POST">
+								<input type="hidden" name="_method" value="delete">
+								<input class="delete-comment" type="submit" value="Borrar comentario">
+							</form>	
+						</div>	
+					<% } %>
+				<% } %>
+			</div>
+		<% } %>
+	
+		<% for (const par of commentConstituentList) { %>
+			<% comment = par[0]; constituent = par[1] %>
+			<div class="card-comments">
+				<div>
+				<a class="link" href="<%= profileConstituentPath(constituent) %>"><%= constituent.name %></a>
+				</div>
+				<%= comment.content %>
+				<div class="card-comments-footer">
+					<%= comment.createdAt.toLocaleString('es-CL', {
+                        dateStyle: 'long',
+                        timeStyle: 'medium',
+                        timeZone: "Chile/Continental",   
+                    }) %>
+				</div>
+				<% if (currentUser) { %>
+					<% if (currentUser.id == comment.authorCommentId && userType == 'constituent') { %>
+						<div>
+							<a class="button-comment" href="<%= editCommentConstituentPath(comment) %>">Editar comentario</a>
+							<form class="form-comment" action="<%= deleteCommentConstituentPath(comment) %>" method="POST">
+								<input type="hidden" name="_method" value="delete">
+								<input class="delete-comment" type="submit" value="Borrar">
+							</form>
+						</div>
+					<% } %>
+				<% } %>
+			</div>
+		<% } %>
+		<% if (currentUser){ %>
+			<% if (userType == 'voter'){ %>
+				<a class="button" href="<%= newCommentPath %>">Comentar</a>
+			<%}%>
+			<% if (userType == 'constituent'){ %>
+				<a class="button" href="<%= newCommentConstituentPath %>">Comentar</a>
+			<%}%>
+		<% } %>
+	</div>
+
+
+	<% } %>
+	<div>
+		<a class="button" href="<%= postPath %>">Volver a las publicaciones</a>
+	</div>
+</div>

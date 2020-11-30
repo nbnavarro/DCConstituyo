@@ -1,0 +1,10 @@
+<div class="container">
+	<% if (constituent.id == idUser && 'constituent' == userType){ %>
+		<div class="card">
+			<h2>Nueva Publicación</h2>
+			<%- include('_form') %>
+		</div>
+	<% } else { %>
+		<h2>No deberías estar aquí</h2>
+	<% } %>
+</div>

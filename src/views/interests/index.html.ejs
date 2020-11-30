@@ -1,0 +1,31 @@
+<div class="container">
+	<h2>Lista intereses</h2>
+
+	<table>
+			<thead>
+				<tr>
+					<th>Votante</th>
+					<th>Temas</th>
+				</tr>
+			</thead>
+
+			<tbody>
+				<% votersList.forEach((voter)=> { %>
+					<tr>
+						<td>
+							<%=voter.name %>
+						</td>
+
+						<td>
+							<ul>
+							<%voter.topics.forEach(element=>{%>
+								<li><%=element.name%></li>
+							<%})%>
+						</ul>
+						</td>
+
+					</tr>
+				<% }) %>
+			</tbody>
+		</table>
+</div>

@@ -1,0 +1,39 @@
+<div class="container">
+	<%if (locals.errors) { %>
+		<div class="errors">
+			You need to fix the following errors:
+			<ul>
+				<%errors.forEach(error => { %>
+					<li><%= error.message %></li>
+				<% }); %>
+			</ul>
+		</div>
+	<% } %>
+	<form action="<%= submitQuestionPath %>" method="post">
+		<% if (!question.isNewRecord) { %>
+			<input type="hidden" name="_method" value="patch">
+		<% } %>
+		<% if (question.isNewRecord) { %>
+				<input type="hidden" name="constituentId" value="<%= constituent.id %>">
+				<input type="hidden" name="authorId" value="<%= idUser %>">
+		<% } else { %>
+				<input type="hidden" name="constituentId" value="<%= question.constituentId %>">
+				<input type="hidden" name="authorId" value="<%= question.authorId %>">
+		<% } %>
+
+
+
+		<div class="grid-general-form">
+			<label for='content'>Contenido</label>
+			<textarea type="text" name="content"><%= question.content %></textarea>
+		</div>
+		
+		<div>
+			<% if (question.isNewRecord) { %>
+				<input class="button" type="submit" name="create" value="Preguntar">
+			<% } else { %>
+				<input class="button" type="submit" name="update" value="Confirmar edición">
+			<% } %>
+		</div>
+	</form>
+</div>

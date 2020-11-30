@@ -1,0 +1,96 @@
+<div class="container">
+<h1>Constituyentes</h1>
+<% if (!constituentsList.length) { %>
+	<h2>Actualmente no hay constituyentes</h2>
+<% } else { %>
+
+<div class="card">
+<div id='react-search-constituent'></div>
+</div>
+<div class="card">
+	<div class="gridtwo">
+		<div>
+			<h3>Filtrar por edad</h3>
+			<form id="formFilterConstituentsAge">
+				<label for='minAge'>Edad mínima</label>
+				<input type="number" id="minAgeInput" min="0" max="150" step="1">
+				<label for='maxAge'>Edad máxima</label>
+				<input type="number" id="maxAgeInput" min="0" max="150" step="1">
+			</form>
+		</div>
+		<div>
+			<h3>Filtrar por tema</h3>
+			<label for="topics">Elige un tema:</label>
+			<select id="selectorTopicId">
+				<option value="nada">Todos los temas</option>
+				<% allTopicsList.forEach((topic)=> { %>
+					<option value = "<%=topic.id%>"> <%=topic.name%> </option>
+				<% }) %>
+			</select>
+		<button class="button" id="botonFiltrarConstituents" form="formFilterConstituentsAge">Filtrar</button>
+		<button class="button" id="botonLimpiarConstituents">Limpiar filtro</button>
+		</div>
+    <div>
+        <h3>Ordenar constituyentes por :</h3>
+			<div id= "react-organizer"></div>
+	  </div>
+  </div>
+</div>
+
+	<div class="gridtwo">	
+	<% constituentsList.forEach((constituent)=> { %>
+		<div class="card constituent" id="<%=constituent.id%>_<%=constituent.age%>_<%=constituent.createdAt%>_[<%=dictConstTema[constituent.id]%>]">
+			<div class="card-title">
+				<a class="link" id="nameConstituent" href="<%= profileConstituentPath(constituent) %>"><%= constituent.name %></a> <span class=constituent-age>(<%= constituent.age %> años)</span>
+			</div>
+			<div class="card-description">
+				<%= constituent.description %>	
+			</div>
+			<div class="card-footer">
+				DCConstituyente desde el <%=constituent.createdAt.toLocaleString('es-CL', {
+                        dateStyle: 'long',
+                        timeStyle: 'medium',  
+                        timeZone: "Chile/Continental", 
+                    }) %>
+			</div>
+			
+			<%if (currentUser) { %>
+				<%if (userType == 'constituent' && currentUser.id != constituent.id) {%>
+					<%if (!seguidos[constituent.id]) { %>
+						<form action="<%=newConstituentFollowPath%>" id="followform" method="post">
+						    <input type="hidden" name="constituentFollowingId" value="<%=constituent.id %>">
+						    <input type="hidden" name="ruta" value="constituentList">
+						    <input class="button" type="submit" value="Seguir">
+						</form>
+					<%} else { %>
+						<form action="<%=removeConstituentFollowPath%>" method="post">
+							<input type="hidden" name="_method" value="delete">
+							<input type="hidden" name="constituentFollowingId" value="<%=constituent.id %>">
+							<input class="button" type="submit" value="Dejar de seguir">
+						</form>
+					<% } %>
+					
+				<% } else if(userType == 'voter'){%>
+					<%if (!seguidos[constituent.id]) {%>
+						<form action="<%=newFollowPath%>" method="post">
+						    <input type="hidden" name="constituentId" value="<%=constituent.id %>">
+						    <input type="hidden" name="voterId" value="<%=currentUser.id %>">
+						    <input type="hidden" name="ruta" value="constituentIndex">
+						    <input class="button" type="submit" value="Seguir">
+						</form>
+					<%} else{%>
+						<form action="<%=removeFollowPath%>" method="post">
+						    <input type="hidden" name="_method" value="delete">
+						    <input type="hidden" name="voterId" value="<%=currentUser.id %>">
+						    <input type="hidden" name="constituentId" value="<%=constituent.id %>">
+						    <input type="hidden" name="ruta" value="constituentIndex">
+						    <input class="button" type="submit" value="Dejar de seguir">
+						</form>
+					<%}%>
+				<%}%>
+			<%}%>
+		</div>
+	<%});%>
+</div>
+<% } %>
+</div>

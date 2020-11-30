@@ -1,0 +1,45 @@
+<div class="container">
+		<%if (locals.errors) { %>
+			<div>
+				Necesitas arreglar los siguientes errores:
+				<ul>
+					<%errors.forEach(error => { %>
+						<li class="error"><%= error.message %></li>
+					<% }); %>
+				</ul>
+			</div>
+		<% } %>
+		<%if (locals.emailError) { %>
+			<p class="error">Tu email ya se encuentra con un usuario registrado</p>
+		<% } %>
+		<form action="<%= submitConstituentPath %>" method="post">
+			<% if (!constituent.isNewRecord) { %>
+				<input type="hidden" name="_method" value="patch">
+			<% } %>
+
+			<div>
+				
+
+			<div class="grid-general-form">
+				<label for='name'>Nombre</label>
+				<input required type="text" name="name" value="<%= constituent.name %>">
+				<label for='age'>Edad</label>
+				<input required type="number" min="0" max="150" step="1" name="age" value="<%= constituent.age %>">
+				<label for='email'>Correo electrónico</label>
+				<input required type="email" name="email" value="<%= constituent.email %>">
+				<label for='password'>Contraseña</label>
+				<input required type="password" name="password" value="">
+				<label for='description'>Resumen tematico</label>
+				<textarea required type="text" name="description"><%= constituent.description %></textarea> 
+				<label for='resume'>Currículum</label>
+				<textarea required type="text" name="resume"><%= constituent.resume %></textarea>
+			</div>
+			<div>
+				<% if (constituent.isNewRecord) { %>
+					<input class="button" type="submit" name="create" value="Crear cuenta">
+				<% } else { %>
+					<input class="button" type="submit" name="update" value="Confirmar cambios">
+				<% } %>
+			</div>
+		</form>
+</div>

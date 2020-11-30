@@ -1,0 +1,41 @@
+<div class="container-adminhome"><h1>Votantes</h1>
+	<% if (!votersList.length) { %>
+		<h2>Actualmente no hay votantes</h2>
+	<% } else { %>
+		<table>
+			<thead>
+				<tr>
+					<th>Nombre</th>
+					<th>Edad</th>
+					<th>Correo</th>
+					<% if (currentUser) {%>
+						<% if (userType == 'admin') {%>
+							<th>Adminstrar</th>
+						<% } %>
+					<% } %>
+				</tr>
+			</thead>
+			<tbody>
+				<% votersList.forEach((voter)=> { %>
+					<tr>
+						<td>
+							<a class="link" href="<%= profileVoterPath(voter) %>"><%= voter.name %></a> 
+						</td>
+						<td><%= voter.age %></td>
+						<td><%= voter.email %></td>
+						<% if (currentUser) {%>
+							<% if (userType == 'admin') {%>
+	
+								<td>
+									<form action="<%=deleteVoterPath(voter)%>" method="post">
+										<input type="hidden" name="_method" value="delete">
+										<input class="button" type="submit" value="Eliminar cuenta">
+									</form>
+								</td>
+							<% } %>
+						<% } %>
+					</tr>
+				<% }) %>
+			</tbody>
+		</table>
+	<% } %></div>

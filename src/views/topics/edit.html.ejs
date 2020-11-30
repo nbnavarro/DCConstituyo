@@ -1,0 +1,12 @@
+<div class="container">
+    
+    <% if ('admin' == userType){ %>
+        <div class="card">
+            <h2>Editar Tema</h2>
+            <%- include('_form') %>
+        </div>
+
+    <%} else{ %>
+        <h3>No deberias estar aqui!</h3>
+    <%}%>
+</div>

@@ -1,0 +1,38 @@
+<div class="container">
+	<%if (locals.errors) { %>
+		<div class="errors">
+			Necesitas arreglar los siguientes errores:
+			<ul>
+				<%errors.forEach(error => { %>
+					<li><%= error.message %></li>
+				<% }); %>
+			</ul>
+		</div>
+	<% } %>
+	<form action="<%= submitAnswerPath %>" method="post">
+		<% if (!answer.isNewRecord) { %>
+			<input type="hidden" name="_method" value="patch">
+		<% } %>
+		<% if (answer.isNewRecord) { %>
+			
+				<input type="hidden" name="questionId" value="<%= question.id %>">
+				<input type="hidden" name="authorId" value="<%= question.constituentId %>">
+		<% } else { %>
+				<input type="hidden" name="questionId" value="<%= answer.questionId %>">
+				<input type="hidden" name="authorId" value="<%= question.constituentId %>">
+		<% } %>
+			<div class="grid-general-form">
+				<label for='description'>Respuesta</label>
+				<textarea type="text" name="description"><%= answer.description %></textarea>
+			</div>
+
+			
+		<div>
+			<% if (answer.isNewRecord) { %>
+				<input class="button" type="submit" name="create" value="Responder">
+			<% } else { %>
+				<input class="button" type="submit" name="update" value="Actualizar">
+			<% } %>
+		</div>
+	</form>
+</div>

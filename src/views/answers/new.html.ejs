@@ -1,0 +1,21 @@
+<div class="container">
+	<% if (!existeRespuesta) { %>
+		<%if (currentUser) {%>
+			<%if (question.constituentId == currentUser.id && userType =='constituent') { %>
+				<div class="card">
+					<h2>Nueva respuesta</h2>
+					<%- include('_form') %>
+				</div>
+			<%}else{%>
+				<h2>Tu no puedes responder esta pregunta</h2>
+			<%}%>
+
+		<%} else{%>
+			<h2>No me hackees, no estas logeado</h2>
+		<%}%>
+		
+	<% } else { %>
+		<h2>Ya ha sido respondida la pregunta </h2>
+	<%}%>
+</div>
+

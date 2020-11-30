@@ -1,0 +1,17 @@
+
+<% if (currentUser){%>
+    <% if (userType !== 'admin') { -%>
+    	<%- include('_userfeed') %>
+    <% } else { -%>
+        <%- include('_adminpage')%>
+    <% } -%>
+	
+<% } else { %>
+	<%- include('_landing') %>
+	<div id="footer">
+	    <a class="link" href="https://www.freepik.es/fotos-vectores-gratis/negocios">Vector de Negocios creado por macrovector - www.freepik.es</a>
+	    <p>Copyright © 2020 | Diseñado por Nicolas Navarro - Javiera Ochoa - Jose Miguel Rojas</p>
+	</div>
+<% } %>
+
+<!-- <div id="react-app">Here a React app will be rendered</div> -->

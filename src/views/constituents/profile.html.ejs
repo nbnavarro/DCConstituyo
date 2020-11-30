@@ -1,0 +1,96 @@
+<h2>Perfil de <%= constituent.name %> (<%= constituent.age %> años)</h2>
+
+<div class="container">
+    <div class="card">
+        <div class="card-description">
+            <%= constituent.description %>
+        </div>
+        <div class="card-content">
+           <%= constituent.resume %> 
+        </div>
+        <div class="card-footer">
+           <%= constituent.email %>
+        </div>
+    </div>
+    <div class="grid-buttons">
+        <a class="button" href="<%= PostsPath %>">Muro</a>
+        <a class="button" href="<%= QuestionsPath %>">Foro</a>
+        <% if ((constituent.id == idUser && 'constituent' == userType) || ('admin' == userType)){ %>
+            <a class="button" href="<%= editConstituentPath(constituent) %>">Editar Perfil</a>
+            <form class ='form-general-button' action="<%= deleteConstituentPath(constituent) %>" method="POST">
+                <input type="hidden" name="_method" value="delete">
+                <input class="delete-general" type="submit" value="Borrar">
+            </form>
+        <% } %>
+    </div>
+    
+</div>
+
+<div class="container">
+    <div class="gridtwo">
+        <div class="grid-item">
+            <div class="card">
+                <h3>Constituyentes seguidos</h3>
+                <div class="gridtwo">
+                <% if (listaSeguidos.length === 0) { -%>
+                    <p>Aún no sigue constituyentes</p>
+                <% } else { -%>
+                <% listaSeguidos.forEach(function(seguido){ %>
+                    <div class="grid-item"><a class="link" href="<%= profileConstituentPath(seguido) %>"><%= seguido.name %></a></div>
+                    <%if (currentUser){%>
+                    <% if (currentUser.id == constituent.id && 'constituent' == userType){ %>
+                        <div class="grid-item">
+                            <form action="<%=deleteConstituentFollowPath %>" method="post">
+                                <input type="hidden" name="_method" value="delete">
+                                <input type="hidden" name="ruta" value="profileConstituent">
+                                <input type="hidden" name="constituentFollowingId" value="<%=seguido.id %>">
+                                <input class="button" type="submit" value="Borrar">
+                            </form>
+                        </div>
+                    <% } %>
+                    <% } %>
+                <% }); %>                    
+                <% } -%>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="grid-item">
+            <div class="card">
+                <h3>Posturas</h3>
+                <div class="grid3">
+                
+                <% if (topicoPostura.length === 0) { -%>
+                    <p>Aún no tiene posturas</p>
+                <% } else { -%>
+                <% topicoPostura.forEach(function(par){%>
+                <%topico=par[0]; postura=par[1]%>
+                   
+                        <a class='link' href="<%=profileTopicPath(topico)%>"><%=topico.name%></a>
+                        <%=postura.name%>
+                        <%if (currentUser){%>
+                            <%if (currentUser.id == constituent.id && userType == 'constituent') {%>
+                                
+                                    <form action="<%=deleteConstituentStancesPath %>" method="post">
+                                        <input type="hidden" name="_method" value="delete">
+                                        <input type="hidden" name="stanceId" value="<%= postura.id %>">
+                                        <input type="hidden" name="constituentId" value="<%= currentUser.id %>">
+                                        <input type="hidden" name="topicId" value="<%= postura.topicId %>">
+                                        <input class="button" type="submit" value="Quitar apoyo">
+                                    </form>
+                           
+                            <%}else{%>
+                                <div></div>
+                            <%}%>
+                        <%} else {%>
+                            <div></div>
+                        <%}%>
+                <%});%>                    
+                <% } -%>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

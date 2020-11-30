@@ -1,0 +1,114 @@
+<div class="container">
+	<h2>Preguntas para <a class="link" href="<%= constituentPath %>"><%= constituent.name %></a></h2>
+	<% if (!questionVoter.length && !questionConstituentList.length) { %>
+		<h2>Aun no hay preguntas hechas</h2>
+
+	<%} else {%>
+		<% for (const par of questionVoter) { %>
+			<% question=par[0]; voter=par[1];%>
+			<div class="card-post">
+				<div>
+					<h3><a class="link" href="<%= profileVoterPath(voter) %>"><%=voter.name %></a></h3>
+				</div>	
+				<div class="post-content"><%= question.content %></div>
+				<div class="card-post-footer">
+					<%= question.createdAt.toLocaleString('es-CL', {
+                        dateStyle: 'long',
+                        timeStyle: 'medium', 
+                        timeZone: "Chile/Continental",  
+                    }) %>
+				</div>
+				<% if ((idUser == question.authorId  && userType =='voter') || (userType == 'admin')){ %>
+					<% if (!(userType == 'admin')) { -%>
+					<a class="button-comment" href="<%= editQuestionPath(question) %>">Editar pregunta</a>		
+					<% } -%>
+					<form class="form-comment" action="<%= deleteQuestionPath(question) %>" method="POST">
+						<input type="hidden" name="_method" value="delete">
+						<input class="delete-comment" type="submit" value="Borrar pregunta">
+					</form>
+				<% } %>
+				
+				<div class="card-comments">
+					<%if(question.id in preguntasRespondidas){%>
+						<div class="post-content">
+							<a class="link" href="<%= answersPath(question) %>"><%=preguntasRespondidas[question.id].description %>
+							</a>
+						</div>
+						<div class="card-post-footer">
+							<%= preguntasRespondidas[question.id].createdAt.toLocaleString('es-CL', {
+	                        dateStyle: 'long',
+	                        timeStyle: 'medium',  
+	                        timeZone: "Chile/Continental", 
+	                    }) %>
+						</div>
+					<%}else{ %>
+						<a class="link" href="<%= answersPath(question) %>">No hay respuesta</a>
+					<% } %>
+				</div>
+			</div>
+				
+			
+		<% } %>
+
+		<% for (const par of questionConstituentList) { %>
+			<% question=par[0]%>
+			<% constituyente=par[1]%>
+			<div class="card-post">
+				<div>
+					<h3><a class="link" href="<%= profileConstituentPath(constituyente) %>"><%=constituyente.name %></a></h3>
+				</div>
+				<div class="post-content"><%= question.content %></div>
+				<div class="card-post-footer">
+					<%= question.createdAt.toLocaleString('es-CL', {
+                        dateStyle: 'long',
+                        timeStyle: 'medium',  
+                        timeZone: "Chile/Continental", 
+                    }) %>
+				</div>
+				<% if ((idUser == question.authorId  && userType =='constituent') || (userType == 'admin')){ %>
+				<% if (!(userType == 'admin')) { -%>
+					<a class="button-comment" href="<%= editQuestionConstituentPath(question) %>">Editar pregunta</a>
+				<% } -%>
+					<form class="form-comment" action="<%= deleteQuestionConstituentPath(question) %>" method="POST">
+						<input type="hidden" name="_method" value="delete">
+						<input class="delete-comment" type="submit" value="Borrar pregunta">
+					</form>
+				<% } %>
+				<div class="card-comments">
+					<%if(question.id in preguntasRespondidasConstituents){%>
+						<div class="post-content">
+							<a class="link" href="<%= answersConstituentPath(question) %>"><%=preguntasRespondidasConstituents[question.id].description %></a>
+						</div>
+						<div class="card-post-footer">
+							<%= preguntasRespondidasConstituents[question.id].createdAt.toLocaleString('es-CL', {
+                        dateStyle: 'long',
+                        timeStyle: 'medium',  
+                        timeZone: "Chile/Continental", 
+                    }) %>
+						</div>
+					<%}else{ %>
+						<a class="link" href="<%= answersConstituentPath(question) %>">No hay respuesta</a>
+					<% } %>
+				</div>
+
+			</div>
+				<% } %>
+
+
+				<% } %>
+			<div class="container">
+				<% if (currentUser){%>
+					<%if (userType == 'voter'){%>
+						<div class="card">
+							<div data-content="voterQuestion_<%=constituent.id%>_<%=currentUser.id%>" class="react-make-question"></div>
+						</div>
+					<% } else if(userType == 'constituent') {%>
+						<div class="card">
+							<div data-content="constituentQuestion_<%=constituent.id%>_<%=currentUser.id%>" class="react-make-question"></div>
+						</div>
+					<%}%>
+					<div><a class="button" href="<%= constituentPath %>">Volver</a></div>
+				<%}%>
+			</div>
+
+</div>

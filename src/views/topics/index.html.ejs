@@ -1,0 +1,94 @@
+
+<div class="container">
+	<h2>Temas</h2>
+
+	<% if (!topicsList.length) { %>
+		<h2>No hay temas actualmente</h2>
+	<% } else { %>
+	<div class="card">
+		<div id="react-search"></div>
+	</div>
+	<div class="gridtwo">
+		<% topicWithStances.forEach((par)=> { %>
+		<% topic = par[0]; stance_const = par[1]; sigo_alguna = par[2] %>
+		<div class="card">
+			<div class="card-title">
+				<a class="link" href="<%= stancesPath(topic) %>"><%= topic.name %></a> 
+			</div>
+
+			<div class="card-description">
+				<%= topic.description %>
+			</div>
+
+			<div class="grid-buttons">
+				<button id="buttonOfTopic_<%=topic.id%>" class="button buttonStance-showHide"> Mostrar posturas </button> 
+
+				<% if ('admin' == userType){ %>
+					<a class="button" href="<%= editTopicPath(topic) %>">Editar</a>
+					<form class="form-general-button" action="<%= deleteTopicPath(topic) %>" method="POST">
+						<input type="hidden" name="_method" value="delete">
+						<input class="delete-general" type="submit" value="Eliminar">
+					</form>
+				<% } %>
+			</div>
+			
+			<div class="gridposturas stances hide" id="stanceOfTopic_<%=topic.id%>">
+			<% stance_const.forEach((par)=> { %>
+				<% stance = par[0]; la_sigo = par[1] %>
+					<div class="postura-style"><%= stance.name %></div>
+					<% if ('admin' == userType){ %>
+							<div>
+								<a class="button" href="<%= editStancePath(topic, stance) %>">Editar</a>
+							</div>
+							<div>
+							<form class="form-general-button" action="<%= deleteStancePath(topic, stance) %>" method="POST">
+								<input type="hidden" name="_method" value="delete">
+								<input class="delete-general" type="submit" value="Eliminar">
+							</form>
+							</div>
+					
+
+					<%} else if ('constituent' == userType) {%>
+						<% if (!la_sigo && !sigo_alguna){%>
+						<form action="<%=newConstituentStancesPath %>" method="post">
+							<input type="hidden" name="stanceId" value="<%= stance.id %>">
+							<input type="hidden" name="constituentId" value="<%= currentUser.id %>">
+							<input type="hidden" name="topicId" value="<%= stance.topicId %>">
+							<input class="button" type="submit" value="Apoyar">
+						</form>
+						<div></div>
+						<%} else if(la_sigo){%>
+						<form action="<%=deleteConstituentStancesPath %>" method="post">
+							<input type="hidden" name="_method" value="delete">
+							<input type="hidden" name="stanceId" value="<%= stance.id %>">
+							<input type="hidden" name="constituentId" value="<%= currentUser.id %>">
+							<input type="hidden" name="topicId" value="<%= stance.topicId %>">
+							<input class="button" type="submit" value="Quitar apoyo">
+						</form>
+						<div></div>
+						<%}else{%>
+							<div></div>
+							<div></div> <!-- NO BORRAR ESTE DIV -->
+						<% }%>
+					<%}else{%>
+					<div></div> <div></div>
+					<%}%>
+			<%});%>
+			</div>
+
+		<% if ('admin' == userType){ %>
+			<a class="button" href="<%= newStancePath(topic) %>">Nueva Postura</a>
+		<% } %>
+		</div>
+		<% }) %>
+	</div>
+<% } %>
+
+<% if (userType == 'admin') { -%>
+	<div class="grid-buttons">
+		<a class="button" href="<%= newTopicPath %>">Nuevo tema</a>
+	</div>	
+<% } %>
+
+</div>
+

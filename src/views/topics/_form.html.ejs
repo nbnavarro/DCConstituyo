@@ -1,0 +1,34 @@
+<div class="container">
+	<%if (locals.errors) { %>
+		<div class="error">
+			Necesitas arreglar los siguientes errores:
+			<ul>
+				<%errors.forEach(error => { %>
+					<li><%= error.message %></li>
+				<% }); %>
+			</ul>
+		</div>
+	<% } %>
+
+	<form action="<%= submitTopicPath %>" method="post">
+		<% if (!topic.isNewRecord) { %>
+			<input type="hidden" name="_method" value="patch">
+		<% } %>
+		<div class="grid-general-form">
+			<label for='name'>Nombre</label>
+			<input type="text" name="name" value="<%= topic.name %>">
+	
+
+			<label for='description'>Descripción</label>
+			<textarea type="text" name="description"><%= topic.description %></textarea> 
+		</div>
+		<div>
+			<% if (topic.isNewRecord) { %>
+				<input class="button" type="submit" name="create" value="Crear tema">
+			<% } else { %>
+				<input class="button" type="submit" name="update" value="Confirmar">
+			<% } %>
+		</div>
+	</form>
+
+</div>

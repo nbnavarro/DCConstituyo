@@ -1,0 +1,40 @@
+<div class = "container">
+	<%if (locals.errors) { %>
+		<div class="errors">
+			Necesitas arreglar los siguientes errores:
+			<ul>
+				<%errors.forEach(error => { %>
+					<li><%= error.message %></li>
+				<% }); %>
+			</ul>
+		</div>
+	<% } %>
+	<%if (locals.emailError) { %>
+		<p class="error">Tu email ya se encuentra con un usuario registrado</p>
+	<% } %>
+
+	<form action="<%= submitVoterPath %>" method="post">
+		<% if (!voter.isNewRecord) { %>
+			<input type="hidden" name="_method" value="patch">
+		<% } %>
+
+		<div class="grid-general-form">
+			<label for='name'>Nombre</label>
+			<input required type="text" name="name" value="<%= voter.name %>">
+			<label for='age'>Edad</label>
+			<input required type="number" min="0" max="150" step="1"  name="age" value="<%= voter.age %>">
+			<label for='email'>Correo electrónico</label>
+			<input required type="email" name="email" value="<%= voter.email %>">
+			<label for='password'>Contraseña</label>
+			<input required type="password" name="password" value="">
+		</div>
+
+		<div>
+			<% if (voter.isNewRecord) { %>
+				<input class="button" type="submit" name="create" value="Crear cuenta">
+			<% } else { %>
+				<input class="button" type="submit" name="update" value="Confirmar cambios">
+			<% } %>
+		</div>
+	</form>
+</div>
